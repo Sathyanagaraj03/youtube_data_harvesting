@@ -187,7 +187,7 @@ def main():
             comments_df.to_sql(name='comment_db', con=engine, if_exists='append', index=False)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #this snippet contains the query to analyze and display the result of the query
-        st.markdown("<h1 style='color: Grey;'># Analyze Data</h1>", unsafe_allow_html=True)
+        
         st.markdown("<h3>Select a Query To Analyze</h3>", unsafe_allow_html=True)
 #Dropdown for selecting Questions
     question = st.selectbox(
@@ -246,14 +246,6 @@ def main():
             query_8 = pd.read_sql_query('''select distinct channel_name from vedio_db 
                                         where extract(year from publish_date) = 2022;''',engine)
             st.write(query_8)
-
-        elif question == "9.Avg. video duration: Present average duration for each channel's videos with names.":
-            query_9 = pd.read_sql_query('''SELECT b.channel_name,
-                                        AVG(CAST(SUBSTRING(a.duration, 3, CHAR_LENGTH(a.duration) - 1) AS DECIMAL(10,2))) AS average_duration_in_minutes
-                                        FROM vedio_db AS a
-                                        JOIN channel_db AS b ON a.channel_id = b.channel_id
-                                        GROUP BY b.channel_name;''',engine)
-            st.write(query_9)
 
         elif question == "10.Most commented videos: Show videos with the highest comments and their channel names.":
             query_10 = pd.read_sql_query('''SELECT b.channel_name,b.video_title, count(a.comment_text) as comment_count 
