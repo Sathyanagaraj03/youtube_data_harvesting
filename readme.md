@@ -58,8 +58,8 @@ To run the YouTube Data Harvesting and Warehousing project, follow these steps:
 
 6. **Run the Application:**
     ```
-    git clone https://github.com/Sathyanagaraj03/GUVI/blob/main
-    streamlit run filename.py
+    git clone https://github.com/Sathyanagaraj03/yt_data_harvesting.git
+    streamlit run youtube.py
     ```
    Access the Streamlit application at `http://localhost:8501` in your web browser.
 
