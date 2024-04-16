@@ -1,42 +1,6 @@
-Youtube data Harvesting Project
- 
- Youtube Data Harvesting project is brought up to build an user-friendly analyzing of Youtube data using a Streamlit Application.The data are scraped from the Youtube API's and migrated to a SQL Database from which the data can be easily analysed and result will be displayed in the streamlit application
- 
-Prerequities needed:
-        vscode
-        python IDE
-        XAMPP 
-To run this project 
-    the following steps to be followed:
-        1. Installation:
-            !pip install sqlalchemy mysqlclient google-api-python-client pandas streamlit googleapiclient
-        2.To use this project, follow these steps:
-
-          =>Clone the repository: git clone
-          =>Install the required packages
-          =>Run the Streamlit app: streamlit run app.py
-          =>Access the app in your browser at http://localhost:8501
-
-Key features of the Project:
-      Collect information from Youtube API
-                 Channel Details
-                 Vedio Details
-                 Comment Details
-       Convert gathered Data into some format 
-       Store it into an SQL Database
-       Analyze the Data
-       Displays analyzed Result in  the Streamlit Apllication
-References
-          Python Documentation
-          Streamlit Documentation
-          YouTube API Documentation
-          MySQL Documentation
-          SQLAlchemy Documentation
-          Pandas Documentation
-        
 
 
-# YouTube Data Harvesting and Warehousing
+# YouTube Data Harvesting..!
 
 Youtube Data Harvesting project is brought up to build an user-friendly analyzing of Youtube data using a Streamlit Application.The data are scraped from the Youtube API's and migrated to a SQL Database from which the data can be easily analysed and result will be displayed in the streamlit application
 
@@ -44,9 +8,9 @@ Youtube Data Harvesting project is brought up to build an user-friendly analyzin
 
 This project leverages the following components:
 
-- **Python:** 
-- **Streamlit:** 
-- **Google API Client:** 
+- **Python** 
+- **Streamlit** 
+- **Google API Client** 
 - **MySQL:** 
 
 
@@ -55,9 +19,7 @@ This project leverages the following components:
 1. googleapiclient.discovery
 2. streamlit
 3. sqlalchemy
-4. pymysql
-5. pymongo
-6. pandas
+4. pandas
 
 ## Features
 
@@ -67,10 +29,10 @@ The YouTube Data Harvesting and Warehousing application offers the following fun
                 - Channel Details
                 -Vedio Details
                 -Comment Details
--Convert gathered Data into some format 
--Store the formatted data into an SQL Database
--Analyze the Data
--Displays analyzed Result in  the Streamlit Apllication
+- Convert gathered Data into formated data 
+- Store the formatted data into an SQL Database
+- Analyze the Data
+- Displays analyzed Result in  the Streamlit Apllication
 
 ## Installation and Setup
 
@@ -92,8 +54,7 @@ To run the YouTube Data Harvesting and Warehousing project, follow these steps:
     - Set up a MySQL database and ensure it is running.
   
 5. **Configure Application:**
-    - Copy the `config.sample.ini` file and rename it to `config.ini`.
-    - Update the `config.ini` file with your Google API credentials and MySQL connection details.
+    - Update the  your Google API credentials and MySQL connection details.
 
 6. **Run the Application:**
     ```
