@@ -1,4 +1,4 @@
-#                                                             Simple Youtube Data Harvesting Project
+#                      Simple Youtube Data Harvesting Project
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #importing necessary Libraries
 import sqlalchemy as sa
