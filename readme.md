@@ -2,7 +2,7 @@
 
 # YouTube Data Harvesting..!
 
-Youtube Data Harvesting project is brought up to build an user-friendly analyzing of Youtube data using a Streamlit Application.The data are scraped from the Youtube API's and migrated to a SQL Database from which the data can be easily analysed and result will be displayed in the streamlit application
+The goal of the Youtube Data Harvesting project is to develop a Streamlit Application that makes it effortless for users to analyze data from YouTube.The information is obtained by scraping the Youtube APIs and transferred to a SQL database, which enables easy analysis and display of the findings in the well-lit application.
 
 ## Tools and Libraries Used
 
