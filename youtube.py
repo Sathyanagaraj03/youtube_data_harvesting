@@ -18,12 +18,12 @@ comment_data=[]
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #environmental variable Declaration,youtube variable declaration and database engine creation
 #channel_id=UC0h1_R8oxsy68J-Z4dDvrKw UCttEB90eQV25-u_U-W2o8mQ UC6mcZ39IWdIXRijApU29r-Q
-api_key="AIzaSyBtWxqZ1bh6geM7nlnmgrfeyaDocO1F6do"
+api_key="YOUR API KEY"
 api_service_name = "youtube"
 api_version = "v3"
 client_secrets_file = "YOUR_CLIENT_SECRET_FILE.json"
 youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=api_key)
-engine = create_engine("mysql+mysqlconnector://root:""@localhost/utube_test")
+engine = create_engine("mysql+mysqlconnector://root:""@localhost/YOUR_DATABASE_NAME")
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #function get the details of channel using channel id
 def get_channel_details(channel_ids):
