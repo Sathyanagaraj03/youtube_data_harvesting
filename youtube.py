@@ -8,7 +8,7 @@ import streamlit as st
 from googleapiclient.errors import HttpError
 import streamlit as st
 import googleapiclient.discovery
-import altair as alt
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #initializing the list to store and access data globally
 channel_details = []
@@ -170,7 +170,6 @@ def main():
     page_icon="",
     layout="wide",
     initial_sidebar_state="expanded")
-   alt.themes.enable("dark")
 
     st.title("Youtube Data Harvesting!!")
     channel_id = st.text_input("Enter YouTube Channel ID:", value="UC_x5XG1OV2P6uZZ5FSM9Ttw")
