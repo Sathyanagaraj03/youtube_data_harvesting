@@ -8,6 +8,7 @@ import streamlit as st
 from googleapiclient.errors import HttpError
 import streamlit as st
 import googleapiclient.discovery
+import altair as alt
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #initializing the list to store and access data globally
 channel_details = []
@@ -164,6 +165,13 @@ def get_comment_data(video_ids):
 #moreover it contains list to dataframe to store in sql database
 #and also display the dataframes of channel data,video data,comment data
 def main():
+    st.set_page_config(
+    page_title="Youtube Data Harvesting",
+    page_icon="",
+    layout="wide",
+    initial_sidebar_state="expanded")
+   alt.themes.enable("dark")
+
     st.title("Youtube Data Harvesting!!")
     channel_id = st.text_input("Enter YouTube Channel ID:", value="UC_x5XG1OV2P6uZZ5FSM9Ttw")
     if channel_id:
@@ -228,14 +236,14 @@ def main():
             st.write(query_4)
 
         elif question == "5.Top liked videos: Show highest likes with respective channel names.":
-            query_5 = pd.read_sql_query('''select a.channel_name, a.Video_Title, a.like_count from 
-                                        (select channel_name, Video_Title,like_count,rank() 
-                                        over(partition by channel_name order by like_count desc)as ranking 
+            query_5 = pd.read_sql_query('''select a.channel_name, a.Video_Title, a.likes_count from 
+                                        (select channel_name, Video_Title,likes_count,rank() 
+                                        over(partition by channel_name order by likes_count desc)as ranking 
                                         from vedio_db) as a where ranking = 1;''',engine)
             st.write(query_5)
 
         elif question == "6.Likes: Display total likes for each video along with names.":
-            query_6 = pd.read_sql_query('''select video_title ,like_count from vedio_db;''',engine)
+            query_6 = pd.read_sql_query('''select video_title ,likes_count from vedio_db;''',engine)
             st.write(query_6)
 
         elif question == "7.Channel views: Showcase total views per channel with corresponding names.":
