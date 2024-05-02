@@ -16,6 +16,9 @@ upload_ids = []
 video_ids = []
 video_details = []
 comment_data=[]
+comments_df={}
+channel_data_df={}
+video_info_df={}
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #environmental variable Declaration,youtube variable declaration and database engine creation
 #channel_id=UC0h1_R8oxsy68J-Z4dDvrKw UCttEB90eQV25-u_U-W2o8mQ UC6mcZ39IWdIXRijApU29r-Q
@@ -216,12 +219,12 @@ def main():
 
     st.markdown(page_element, unsafe_allow_html=True)
 
+    with st.container(height=800):
+        st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>Youtube Data Harvesting </h1>", unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>Youtube Data Harvesting </h1>", unsafe_allow_html=True)
-
-    channel_id = st.text_input("Enter YouTube Channel ID:", value="UCttEB90eQV25-u_U-W2o8mQ")
-    if channel_id:
-        if st.button("Process Channel ID", key="process_button"):
+        channel_id = st.text_input("Enter YouTube Channel ID:", value="UCttEB90eQV25-u_U-W2o8mQ")
+        if channel_id:
+         if st.button("Process Channel ID", key="process_button"):
             channel_details = get_channel_details(channel_id)
             channel_data_df=pd.DataFrame(channel_details)
             st.write("The channel Data:")
@@ -258,7 +261,7 @@ def main():
 #this snippet contains the query to analyze and display the result of the query
         st.markdown("<h5 style='color: black;'>Select a Query To Analyze</h5>", unsafe_allow_html=True)
 #Dropdown for selecting Questions
-    question = st.selectbox(
+        question = st.selectbox(
         'Please Select Your Question',
         ("Select a Query","1.Videos and their channels: Display video titles along with their corresponding channels.",
         "2.Channels with most videos: Highlight channels with the highest video counts and the number of videos.",
@@ -271,51 +274,51 @@ def main():
         "9.Avg. video duration: Present average duration for each channel's videos with names.",
         "10.Most commented videos: Show videos with the highest comments and their channel names."),help="Select pre written query to analyze data")
 # Displaying the output for selected questions 
-    if st.button("Query Database"):
-        st.write(f"Analyzing data for question: {question}")
-        if question == "1.Videos and their channels: Display video titles along with their corresponding channels.":
+        if st.button("Query Database"):
+          st.write(f"Analyzing data for question: {question}")
+          if question == "1.Videos and their channels: Display video titles along with their corresponding channels.":
             query_1 = pd.read_sql_query("select Channel_Name,Video_Title from vedio_db order by channel_name;",engine)
             st.write(query_1)
 
-        elif question == "2.Channels with most videos: Highlight channels with the highest video counts and the number of videos.":
+          elif question == "2.Channels with most videos: Highlight channels with the highest video counts and the number of videos.":
             query_2 = pd.read_sql_query('''select channel_name,count(Video_ID) as video_count 
                                         FROM vedio_db group by channel_name order by video_count desc;''',engine)
             st.write(query_2)
 
-        elif question == "3.Top 10 viewed videos: Present the top 10 most viewed videos and their respective channel names.":
+          elif question == "3.Top 10 viewed videos: Present the top 10 most viewed videos and their respective channel names.":
             query_3 = pd.read_sql_query('''select * from (select channel_name, video_title,view_count, 
                                         rank() over(partition by channel_id order by view_count desc) as video_rank
                                         from vedio_db where view_count is not null) as ranking  
                                         where video_rank <= 10;''',engine)
             st.write(query_3)
 
-        elif question == "4.Comments per video: Display comment count and corresponding video names.":
+          elif question == "4.Comments per video: Display comment count and corresponding video names.":
             query_4 = pd.read_sql_query('''select b.video_title,a.video_id, count(a.comment_id) as comment_count 
                                         from comment_db as a left join vedio_db as b on a.Video_Id = b.Video_Id 
                                         group by a.video_id order by count(a.comment_id) desc;''',engine)
             st.write(query_4)
 
-        elif question == "5.Top liked videos: Show highest likes with respective channel names.":
+          elif question == "5.Top liked videos: Show highest likes with respective channel names.":
             query_5 = pd.read_sql_query('''select a.channel_name, a.Video_Title, a.likes_count from 
                                         (select channel_name, Video_Title,likes_count,rank() 
                                         over(partition by channel_id order by likes_count desc)as ranking 
                                         from vedio_db) as a where ranking = 1;''',engine)
             st.write(query_5)
 
-        elif question == "6.Likes: Display total likes for each video along with names.":
+          elif question == "6.Likes: Display total likes for each video along with names.":
             query_6 = pd.read_sql_query('''select video_title ,likes_count from vedio_db;''',engine)
             st.write(query_6)
 
-        elif question == "7.Channel views: Showcase total views per channel with corresponding names.":
+          elif question == "7.Channel views: Showcase total views per channel with corresponding names.":
             query_7 = pd.read_sql_query('''select Channel_Name , channel_views from channel_db;''',engine)
             st.write(query_7)
 
-        elif question == "8.2022 Publishers: List channels that published videos in 2022.":
+          elif question == "8.2022 Publishers: List channels that published videos in 2022.":
             query_8 = pd.read_sql_query('''select distinct channel_name from vedio_db 
                                         where extract(year from publish_date) = 2022;''',engine)
             st.write(query_8)
 
-        elif question == "10.Most commented videos: Show videos with the highest comments and their channel names.":
+          elif question == "10.Most commented videos: Show videos with the highest comments and their channel names.":
             query_10 = pd.read_sql_query('''SELECT b.channel_name,b.video_title, count(a.comment_text) as comment_count 
                                             from comment_db as a left join vedio_db as b 
                                             on a.video_id = b.video_id group by a.video_id,b.channel_name 
