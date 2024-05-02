@@ -16,9 +16,6 @@ upload_ids = []
 video_ids = []
 video_details = []
 comment_data=[]
-comments_df={}
-channel_data_df={}
-video_info_df={}
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #environmental variable Declaration,youtube variable declaration and database engine creation
 #channel_id=UC0h1_R8oxsy68J-Z4dDvrKw UCttEB90eQV25-u_U-W2o8mQ UC6mcZ39IWdIXRijApU29r-Q
