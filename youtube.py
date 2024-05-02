@@ -8,7 +8,7 @@ import streamlit as st
 from googleapiclient.errors import HttpError
 import streamlit as st
 import googleapiclient.discovery
-
+import time
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #initializing the list to store and access data globally
 channel_details = []
@@ -16,15 +16,18 @@ upload_ids = []
 video_ids = []
 video_details = []
 comment_data=[]
+comments_df={}
+channel_data_df={}
+video_info_df={}
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #environmental variable Declaration,youtube variable declaration and database engine creation
 #channel_id=UC0h1_R8oxsy68J-Z4dDvrKw UCttEB90eQV25-u_U-W2o8mQ UC6mcZ39IWdIXRijApU29r-Q
-api_key="YOUR API KEY"
+api_key="AIzaSyBtWxqZ1bh6geM7nlnmgrfeyaDocO1F6do"
 api_service_name = "youtube"
 api_version = "v3"
 client_secrets_file = "YOUR_CLIENT_SECRET_FILE.json"
 youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=api_key)
-engine = create_engine("mysql+mysqlconnector://root:""@localhost/YOUR_DATABASE_NAME")
+engine = create_engine("mysql+mysqlconnector://root:""@localhost/demo")
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #function get the details of channel using channel id
 def get_channel_details(channel_ids):
@@ -170,32 +173,93 @@ def main():
     page_icon="",
     layout="wide",
     initial_sidebar_state="expanded")
+    #alt.themes.enable("dark")
 
-    st.title("Youtube Data Harvesting!!")
-    channel_id = st.text_input("Enter YouTube Channel ID:", value="UC_x5XG1OV2P6uZZ5FSM9Ttw")
+    page_element="""
+           <style>
+           [data-testid="stAppViewContainer"]{
+           background-image: url("https://s3.envato.com/files/222635875/preview_image.jpg");
+           background-size: auto;
+           background-repeat:repeat;
+           }
+        
+
+        /* Add custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .stButton>button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .stButton>button:hover {
+            background-color: #45a049;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+           .title-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF5733; /* Custom title color */
+            margin-bottom: 20px;
+        }
+        
+      </style>
+        """
+
+    st.markdown(page_element, unsafe_allow_html=True)
+
+
+    st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>Youtube Data Harvesting </h1>", unsafe_allow_html=True)
+
+    channel_id = st.text_input("Enter YouTube Channel ID:", value="UCttEB90eQV25-u_U-W2o8mQ")
     if channel_id:
         if st.button("Process Channel ID", key="process_button"):
             channel_details = get_channel_details(channel_id)
             channel_data_df=pd.DataFrame(channel_details)
             st.write("The channel Data:")
             st.write(channel_data_df)
-            channel_data_df.to_sql(name='channel_db', con=engine, if_exists='append', index=False)
+            
             upload_ids = get_playlist_id(channel_id)
             video_ids = get_video_ids(channel_id)
             video_details = get_video_details(video_ids)
             video_info_df=pd.DataFrame(video_details)
             st.write("The vedio Data:")
             st.write(video_info_df)
-            video_info_df.to_sql(name='vedio_db', con=engine, if_exists='append', index=False)
+            
             comment_data = get_comment_data(video_ids)
             comments_df=pd.DataFrame(comment_data)
             st.write("The comments Data:")
-            st.write(comments_df)
-            comments_df.to_sql(name='comment_db', con=engine, if_exists='append', index=False)
+            st.write(comments_df)   
+            try:
+    # Attempt to store data in the database
+               channel_data_df.to_sql(name='channel_db', con=engine, if_exists='append', index=False)
+               video_info_df.to_sql(name='video_db', con=engine, if_exists='append', index=False)
+               comments_df.to_sql(name='comment_db', con=engine, if_exists='append', index=False)
+               with st.spinner('Storing Data...'):
+    # Simulate a long-running computation
+                 time.sleep(5)
+                 st.success('Database is ready for querying')
+                 
+    # If the operations complete successfully, display this message
+               
+            except Exception as e:
+    # If there is any error, display this message
+                st.error(f"Failed to store data: {e}")
+            
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #this snippet contains the query to analyze and display the result of the query
-        
-        st.markdown("<h3>Select a Query To Analyze</h3>", unsafe_allow_html=True)
+        st.markdown("<h5 style='color: black;'>Select a Query To Analyze</h5>", unsafe_allow_html=True)
 #Dropdown for selecting Questions
     question = st.selectbox(
         'Please Select Your Question',
@@ -223,7 +287,7 @@ def main():
 
         elif question == "3.Top 10 viewed videos: Present the top 10 most viewed videos and their respective channel names.":
             query_3 = pd.read_sql_query('''select * from (select channel_name, video_title,view_count, 
-                                        rank() over(partition by channel_name order by view_count desc) as video_rank
+                                        rank() over(partition by channel_id order by view_count desc) as video_rank
                                         from vedio_db where view_count is not null) as ranking  
                                         where video_rank <= 10;''',engine)
             st.write(query_3)
@@ -237,7 +301,7 @@ def main():
         elif question == "5.Top liked videos: Show highest likes with respective channel names.":
             query_5 = pd.read_sql_query('''select a.channel_name, a.Video_Title, a.likes_count from 
                                         (select channel_name, Video_Title,likes_count,rank() 
-                                        over(partition by channel_name order by likes_count desc)as ranking 
+                                        over(partition by channel_id order by likes_count desc)as ranking 
                                         from vedio_db) as a where ranking = 1;''',engine)
             st.write(query_5)
 
