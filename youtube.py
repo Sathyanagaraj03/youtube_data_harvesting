@@ -1,3 +1,6 @@
+                            #simple youtube data harvesting project      
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#importing libraries
 import sqlalchemy as sa
 from sqlalchemy import create_engine
 import pandas as pd
@@ -7,6 +10,7 @@ import streamlit as st
 import googleapiclient.discovery
 import time
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#declaration of list and dictionaries
 channel_details = []
 upload_ids = []
 video_ids = []
@@ -36,6 +40,7 @@ def Scratch_data(channel_id):
     #comments_df = pd.DataFrame(comment_data)
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#function to view channel details
 def view_details(channel_id):
             
             channel_details = get_channel_details(channel_id)
@@ -55,6 +60,7 @@ def view_details(channel_id):
             st.write("The comments Data:")
             st.write(comments_df)
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#function to store data to mysql database
 def sql_tables():
                 
             channel_data_df = pd.DataFrame(channel_details)
