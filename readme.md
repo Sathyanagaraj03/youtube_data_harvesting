@@ -11,7 +11,7 @@ This project leverages the following components:
 - **Python** 
 - **Streamlit** 
 - **Google API Client** 
-- **MySQL:** 
+- **MySQL** 
 
 
 ## Required Libraries
