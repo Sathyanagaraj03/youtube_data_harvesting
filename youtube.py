@@ -1,6 +1,3 @@
-                            #simple youtube data harvesting project      
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#importing libraries
 import sqlalchemy as sa
 from sqlalchemy import create_engine
 import pandas as pd
@@ -9,8 +6,7 @@ from googleapiclient.errors import HttpError
 import streamlit as st
 import googleapiclient.discovery
 import time
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#declaration of list and dictionaries
+
 channel_details = []
 upload_ids = []
 video_ids = []
@@ -33,21 +29,26 @@ engine = create_engine("mysql+mysqlconnector://root:""@localhost/demo")
 def Scratch_data(channel_id): 
     channel_details = get_channel_details(channel_id)
     #channel_data_df = pd.DataFrame(channel_details)
+            
+
     video_ids = get_video_ids(channel_id)
     video_details = get_video_details(video_ids)
     #video_info_df = pd.DataFrame(video_details)
+
+
     comment_data = get_comment_data(video_ids)
     #comments_df = pd.DataFrame(comment_data)
-
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#function to view channel details
 def view_details(channel_id):
             
             channel_details = get_channel_details(channel_id)
             channel_data_df = pd.DataFrame(channel_details)
+            
+
             video_ids = get_video_ids(channel_id)
             video_details = get_video_details(video_ids)
             video_info_df = pd.DataFrame(video_details)
+
+
             comment_data = get_comment_data(video_ids)
             comments_df = pd.DataFrame(comment_data)
             channel_data_df = pd.DataFrame(channel_details)
@@ -59,8 +60,6 @@ def view_details(channel_id):
             comments_df = pd.DataFrame(comment_data)
             st.write("The comments Data:")
             st.write(comments_df)
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#function to store data to mysql database
 def sql_tables():
                 
             channel_data_df = pd.DataFrame(channel_details)
@@ -69,9 +68,8 @@ def sql_tables():
             channel_data_df.to_sql(name='channel_db', con=engine, if_exists='append', index=False)
             video_info_df.to_sql(name='vedio_db', con=engine, if_exists='append', index=False)
             comments_df.to_sql(name='comment_db', con=engine, if_exists='append', index=False)
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-def get_channel_details(channel_ids):
 
+def get_channel_details(channel_ids):
     all_channel_data =[]
     request = youtube.channels().list(
         part ="snippet,contentDetails,statistics",
@@ -204,19 +202,18 @@ def get_comment_data(video_ids):
             if comments_disabled:
                 break
     return comment_data
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 def main():
     st.set_page_config(
     page_title="Youtube Data Harvesting",
     page_icon="",
     layout="wide",
     initial_sidebar_state="expanded")
-    #alt.themes.enable("dark")
-
+    
     page_element="""
            <style>
            [data-testid="stAppViewContainer"]{
-           background-image: url("https://s3.envato.com/files/222635875/preview_image.jpg");
+           
            background-size: auto;
            background-repeat:repeat;
            }
@@ -254,26 +251,34 @@ def main():
         
       </style>
         """
-
+    
     st.markdown(page_element, unsafe_allow_html=True)
-
-    st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>Youtube Data Harvesting </h1>", unsafe_allow_html=True)
+    t1,t2,t3=st.tabs(["home","Channel Data Display","Query And Outputs"])
+    with t1:
+     st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>Youtube Data Harvesting </h1>", unsafe_allow_html=True)
     #col1, col2, col3 = st.columns([2, 1, 1])
-    channel_id = st.text_input("Enter YouTube Channel ID:", value="UCttEB90eQV25-u_U-W2o8mQ")
-    if channel_id:
-      
+     channel_id = st.text_input("Enter YouTube Channel ID:", value="UCttEB90eQV25-u_U-W2o8mQ")
+     if channel_id:
+       
        if st.button("Process Channel ID", key="process_button"):
              Scratch_data(channel_id)
              st.success("Scratched the data")
       
-             if st.button("View data",key="views"):
+            
+    with t2:
+             st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>View Channel Details </h1>", unsafe_allow_html=True)
+             st.subheader("Click the view the Scratched Data")
+             if st.button("view data",key="views"):
                 view_details(channel_id)
-      
-             if st.button("Store data",key="store"):
+             st.subheader("Do you want migrate data inot MYSQL Server?")
+             if st.button("Migrate data"):
                 sql_tables()
-             
                 st.success("stored to Database")
-             if st.button("Query Database"):
+    with t3: 
+               st.write(" ")
+               st.markdown("<h1 style='text-align: center;font-family:Italic; color: red';>Query Databas</h1>", unsafe_allow_html=True)
+
+
                question = st.selectbox(
         'Please Select Your Question',
         ("Select a Query",
@@ -354,6 +359,6 @@ def main():
                                              GROUP BY a.Video_ID, b.Channel_Name 
                                              ORDER BY Comment_Count DESC;''', engine)
                   st.write(query_10)
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 if __name__ == "__main__":
     main()
