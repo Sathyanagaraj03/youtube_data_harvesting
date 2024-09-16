@@ -34,8 +34,6 @@ def Scratch_data(channel_id):
     video_ids = get_video_ids(channel_id)
     video_details = get_video_details(video_ids)
     #video_info_df = pd.DataFrame(video_details)
-
-
     comment_data = get_comment_data(video_ids)
     #comments_df = pd.DataFrame(comment_data)
 def view_details(channel_id):
@@ -68,7 +66,7 @@ def sql_tables():
             channel_data_df.to_sql(name='channel_db', con=engine, if_exists='append', index=False)
             video_info_df.to_sql(name='vedio_db', con=engine, if_exists='append', index=False)
             comments_df.to_sql(name='comment_db', con=engine, if_exists='append', index=False)
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 def get_channel_details(channel_ids):
     all_channel_data =[]
     request = youtube.channels().list(
@@ -206,7 +204,7 @@ def get_comment_data(video_ids):
 def main():
     st.set_page_config(
     page_title="Youtube Data Harvesting",
-    page_icon="",
+    page_icon="▶️",
     layout="wide",
     initial_sidebar_state="expanded")
     
